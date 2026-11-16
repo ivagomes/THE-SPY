@@ -19,6 +19,8 @@ export default function SetupScreen({ navigation }) {
   const [impostorCount, setImpostorCount] = useState(1);
 
   const maxImpostors = getMaxImpostors(playerCount);
+  const activeCategoryObj =
+    CATEGORIES.find((cat) => cat.id === selectedCategory) || CATEGORIES[0];
 
   const updatePlayerCount = (newCount) => {
     const clampedCount = Math.max(MIN_PLAYERS, Math.min(30, newCount));
@@ -77,19 +79,35 @@ export default function SetupScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.header}>
-          <Text style={styles.badge}>O ESPIÃO</Text>
+          <View style={styles.badgePill}>
+            <Text style={styles.badge}>JOGO DE FESTA • O ESPIÃO</Text>
+          </View>
           <Text style={styles.title}>Configurar Partida</Text>
           <Text style={styles.subtitle}>
-            Defina a categoria, o número de jogadores e quantos impostores estarão infiltrados.
+            Escolha o tema da rodada, quantos amigos vão jogar e quantos
+            impostores estarão infiltrados.
           </Text>
         </View>
 
-        {/* Seleção de Categoria */}
+        {/* 1. Seleção de Categoria (13 categorias com grid fluido) */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>1. Categoria</Text>
-          <View style={styles.categoryList}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionTitle}>1. Categoria</Text>
+            <Text style={styles.activeCategoryTag}>
+              {activeCategoryObj.name} ({activeCategoryObj.words.length})
+            </Text>
+          </View>
+          <Text style={styles.helperText}>
+            Toque em uma das {CATEGORIES.length} categorias disponíveis:
+          </Text>
+
+          <View style={styles.categoryGrid}>
             {CATEGORIES.map((category) => {
               const isSelected = category.id === selectedCategory;
               return (
@@ -108,7 +126,7 @@ export default function SetupScreen({ navigation }) {
                       isSelected && styles.categoryChipTextActive,
                     ]}
                   >
-                    {category.name} ({category.words.length} palavras)
+                    {category.name}
                   </Text>
                 </TouchableOpacity>
               );
@@ -116,10 +134,12 @@ export default function SetupScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Quantidade de Jogadores */}
+        {/* 2. Quantidade de Jogadores */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>2. Quantidade de Jogadores</Text>
-          <Text style={styles.helperText}>Mínimo de {MIN_PLAYERS} jogadores</Text>
+          <Text style={styles.helperText}>
+            Mínimo de {MIN_PLAYERS} jogadores na roda
+          </Text>
 
           <View style={styles.counterRow}>
             <TouchableOpacity
@@ -127,10 +147,11 @@ export default function SetupScreen({ navigation }) {
                 styles.counterButton,
                 playerCount <= MIN_PLAYERS && styles.counterButtonDisabled,
               ]}
+              activeOpacity={0.75}
               onPress={() => updatePlayerCount(playerCount - 1)}
               disabled={playerCount <= MIN_PLAYERS}
             >
-              <Text style={styles.counterButtonText}>-</Text>
+              <Text style={styles.counterButtonText}>−</Text>
             </TouchableOpacity>
 
             <TextInput
@@ -144,6 +165,7 @@ export default function SetupScreen({ navigation }) {
 
             <TouchableOpacity
               style={styles.counterButton}
+              activeOpacity={0.75}
               onPress={() => updatePlayerCount(playerCount + 1)}
             >
               <Text style={styles.counterButtonText}>+</Text>
@@ -151,13 +173,13 @@ export default function SetupScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Quantidade de Impostores */}
+        {/* 3. Quantidade de Impostores */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>3. Quantidade de Impostores</Text>
           <Text style={styles.helperText}>
             {playerCount < 10
-              ? 'Grupos de 4 a 9 jogadores: máximo de 1 impostor.'
-              : 'Grupo de 10+ jogadores: você pode escolher 1 ou 2 impostores.'}
+              ? 'De 4 a 9 jogadores: máximo permitido de 1 impostor.'
+              : 'Grupo com 10+ jogadores: liberado 1 ou 2 impostores!'}
           </Text>
 
           <View style={styles.impostorRow}>
@@ -185,22 +207,24 @@ export default function SetupScreen({ navigation }) {
                   >
                     {countOption} {countOption === 1 ? 'Impostor' : 'Impostores'}
                   </Text>
-                  {isBlocked && (
+                  {isBlocked ? (
                     <Text style={styles.lockHint}>Requer 10+ jogadores</Text>
+                  ) : (
+                    <Text style={styles.unlockedHint}>Disponível</Text>
                   )}
                 </TouchableOpacity>
               );
             })}
           </View>
         </View>
-
-        <View style={styles.footer}>
-          <PrimaryButton
-            title="Definir Nomes dos Jogadores"
-            onPress={handleContinue}
-          />
-        </View>
       </ScrollView>
+
+      <View style={styles.stickyFooter}>
+        <PrimaryButton
+          title="Definir Nomes dos Jogadores"
+          onPress={handleContinue}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -208,90 +232,114 @@ export default function SetupScreen({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#0B1120',
   },
   container: {
     padding: 20,
-    paddingBottom: 36,
+    paddingBottom: 24,
   },
   header: {
-    marginBottom: 24,
+    marginBottom: 20,
+  },
+  badgePill: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#E6394626',
+    borderWidth: 1,
+    borderColor: '#E6394666',
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    marginBottom: 10,
   },
   badge: {
-    color: '#E63946',
-    fontWeight: '800',
-    fontSize: 13,
-    letterSpacing: 1.5,
-    marginBottom: 6,
+    color: '#FF6B78',
+    fontWeight: '900',
+    fontSize: 12,
+    letterSpacing: 1.4,
   },
   title: {
-    color: '#F8FAFC',
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 8,
+    color: '#FFFFFF',
+    fontSize: 32,
+    fontWeight: '900',
+    marginBottom: 6,
   },
   subtitle: {
-    color: '#94A3B8',
+    color: '#CBD5E1',
     fontSize: 15,
     lineHeight: 22,
   },
   card: {
     backgroundColor: '#1E293B',
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 18,
     marginBottom: 16,
     borderWidth: 1,
     borderColor: '#334155',
   },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
   sectionTitle: {
-    color: '#F1F5F9',
-    fontSize: 17,
-    fontWeight: '700',
-    marginBottom: 6,
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  activeCategoryTag: {
+    color: '#FF6B78',
+    fontSize: 13,
+    fontWeight: '800',
   },
   helperText: {
     color: '#94A3B8',
     fontSize: 13,
     marginBottom: 14,
   },
-  categoryList: {
+  categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 8,
+    gap: 10,
   },
   categoryChip: {
     backgroundColor: '#0F172A',
     borderWidth: 1.5,
     borderColor: '#334155',
     paddingVertical: 12,
-    paddingHorizontal: 18,
-    borderRadius: 12,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    minWidth: '30%',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   categoryChipActive: {
-    backgroundColor: '#E6394622',
-    borderColor: '#E63946',
+    backgroundColor: '#E63946',
+    borderColor: '#FF6B78',
   },
   categoryChipText: {
     color: '#CBD5E1',
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '700',
+    textAlign: 'center',
   },
   categoryChipTextActive: {
-    color: '#F8FAFC',
-    fontWeight: '700',
+    color: '#FFFFFF',
+    fontWeight: '900',
   },
   counterRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: 18,
   },
   counterButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 12,
+    width: 60,
+    height: 60,
+    borderRadius: 16,
     backgroundColor: '#0F172A',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#475569',
     alignItems: 'center',
     justifyContent: 'center',
@@ -300,22 +348,22 @@ const styles = StyleSheet.create({
     opacity: 0.35,
   },
   counterButtonText: {
-    color: '#F8FAFC',
-    fontSize: 26,
-    fontWeight: '700',
+    color: '#FFFFFF',
+    fontSize: 30,
+    fontWeight: '900',
   },
   counterInput: {
-    minWidth: 80,
-    height: 52,
+    minWidth: 96,
+    height: 60,
     backgroundColor: '#0F172A',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#475569',
-    color: '#F8FAFC',
-    fontSize: 22,
-    fontWeight: '800',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#64748B',
+    color: '#FFFFFF',
+    fontSize: 26,
+    fontWeight: '900',
     textAlign: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
   },
   impostorRow: {
     flexDirection: 'row',
@@ -323,9 +371,10 @@ const styles = StyleSheet.create({
   },
   impostorOption: {
     flex: 1,
+    minHeight: 72,
     backgroundColor: '#0F172A',
-    borderRadius: 12,
-    borderWidth: 1.5,
+    borderRadius: 16,
+    borderWidth: 2,
     borderColor: '#334155',
     paddingVertical: 14,
     paddingHorizontal: 12,
@@ -333,7 +382,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   impostorOptionSelected: {
-    backgroundColor: '#E6394622',
+    backgroundColor: '#E639462E',
     borderColor: '#E63946',
   },
   impostorOptionBlocked: {
@@ -341,9 +390,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F172A',
   },
   impostorOptionNumber: {
-    color: '#CBD5E1',
-    fontSize: 15,
-    fontWeight: '700',
+    color: '#E2E8F0',
+    fontSize: 17,
+    fontWeight: '800',
   },
   impostorOptionTextSelected: {
     color: '#FFFFFF',
@@ -353,11 +402,24 @@ const styles = StyleSheet.create({
   },
   lockHint: {
     color: '#94A3B8',
-    fontSize: 11,
+    fontSize: 12,
     marginTop: 4,
     textAlign: 'center',
+    fontWeight: '600',
   },
-  footer: {
-    marginTop: 8,
+  unlockedHint: {
+    color: '#34D399',
+    fontSize: 12,
+    marginTop: 4,
+    textAlign: 'center',
+    fontWeight: '700',
+  },
+  stickyFooter: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 16,
+    backgroundColor: '#0B1120',
+    borderTopWidth: 1,
+    borderTopColor: '#1E293B',
   },
 });

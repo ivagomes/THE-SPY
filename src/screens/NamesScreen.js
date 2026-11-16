@@ -49,11 +49,12 @@ export default function NamesScreen({ route, navigation }) {
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>Nomes dos Jogadores</Text>
+            <Text style={styles.title}>Quem vai jogar?</Text>
             <Text style={styles.subtitle}>
-              Digite o nome de cada participante ({playerCount} jogadores •{' '}
+              Toque em qualquer nome para personalizar ({playerCount} jogadores •{' '}
               {impostorCount} {impostorCount === 1 ? 'impostor' : 'impostores'}).
             </Text>
           </View>
@@ -76,11 +77,11 @@ export default function NamesScreen({ route, navigation }) {
               </View>
             ))}
           </View>
-
-          <View style={styles.footer}>
-            <PrimaryButton title="Sortear e Começar" onPress={handleStartGame} />
-          </View>
         </ScrollView>
+
+        <View style={styles.stickyFooter}>
+          <PrimaryButton title="Sortear e Começar" onPress={handleStartGame} />
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -89,65 +90,71 @@ export default function NamesScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#0B1120',
   },
   flex: {
     flex: 1,
   },
   container: {
     padding: 20,
-    paddingBottom: 36,
+    paddingBottom: 24,
   },
   header: {
     marginBottom: 20,
   },
   title: {
-    color: '#F8FAFC',
-    fontSize: 26,
-    fontWeight: '800',
+    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '900',
     marginBottom: 6,
   },
   subtitle: {
-    color: '#94A3B8',
-    fontSize: 14,
-    lineHeight: 20,
+    color: '#CBD5E1',
+    fontSize: 15,
+    lineHeight: 22,
   },
   inputsContainer: {
     gap: 12,
-    marginBottom: 24,
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1E293B',
-    borderRadius: 12,
-    borderWidth: 1,
+    borderRadius: 16,
+    borderWidth: 1.5,
     borderColor: '#334155',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
   },
   indexBadge: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 38,
+    height: 38,
+    borderRadius: 10,
     backgroundColor: '#0F172A',
+    borderWidth: 1,
+    borderColor: '#475569',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 14,
   },
   indexText: {
-    color: '#E63946',
-    fontWeight: '800',
-    fontSize: 14,
+    color: '#FF6B78',
+    fontWeight: '900',
+    fontSize: 16,
   },
   input: {
     flex: 1,
-    color: '#F8FAFC',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
     paddingVertical: 10,
   },
-  footer: {
-    marginTop: 4,
+  stickyFooter: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 16,
+    backgroundColor: '#0B1120',
+    borderTopWidth: 1,
+    borderTopColor: '#1E293B',
   },
 });

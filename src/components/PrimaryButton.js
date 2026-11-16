@@ -10,7 +10,7 @@ export default function PrimaryButton({
 }) {
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.82}
       onPress={onPress}
       disabled={disabled}
       style={[
@@ -37,33 +37,44 @@ export default function PrimaryButton({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#E63946',
-    paddingVertical: 16,
+    minHeight: 62,
+    paddingVertical: 18,
     paddingHorizontal: 24,
-    borderRadius: 12,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    shadowColor: '#E63946',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
   secondaryButton: {
     backgroundColor: '#1E293B',
-    borderWidth: 1,
-    borderColor: '#334155',
+    borderWidth: 2,
+    borderColor: '#475569',
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    elevation: 2,
   },
   dangerButton: {
     backgroundColor: '#DC2626',
   },
   disabledButton: {
     backgroundColor: '#334155',
-    opacity: 0.5,
+    opacity: 0.45,
+    elevation: 0,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 0.4,
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    textAlign: 'center',
   },
   secondaryButtonText: {
-    color: '#E2E8F0',
+    color: '#F8FAFC',
   },
   disabledButtonText: {
     color: '#94A3B8',

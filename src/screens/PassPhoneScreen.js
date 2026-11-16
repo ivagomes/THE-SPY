@@ -26,15 +26,19 @@ export default function PassPhoneScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.stepIndicator}>
-          Jogador {currentPlayerIndex + 1} de {totalPlayers}
-        </Text>
+        <View style={styles.progressBadge}>
+          <Text style={styles.stepIndicator}>
+            JOGADOR {currentPlayerIndex + 1} DE {totalPlayers}
+          </Text>
+        </View>
 
         <View style={styles.card}>
           <Text style={styles.instruction}>Passe o celular para</Text>
           <Text style={styles.playerName}>{currentPlayer.name}</Text>
+          <View style={styles.divider} />
           <Text style={styles.warning}>
-            Certifique-se de que mais ninguém está olhando para a tela antes de continuar.
+            Mantenha a tela virada para você. Só toque no botão abaixo quando o
+            celular estiver na sua mão!
           </Text>
         </View>
 
@@ -50,7 +54,7 @@ export default function PassPhoneScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#0B1120',
   },
   container: {
     flex: 1,
@@ -58,42 +62,56 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  stepIndicator: {
-    color: '#94A3B8',
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
+  progressBadge: {
     marginTop: 12,
+    backgroundColor: '#1E293B',
+    borderWidth: 1,
+    borderColor: '#334155',
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    borderRadius: 999,
+  },
+  stepIndicator: {
+    color: '#E2E8F0',
+    fontSize: 14,
+    fontWeight: '800',
+    letterSpacing: 1.5,
   },
   card: {
     width: '100%',
     backgroundColor: '#1E293B',
-    borderRadius: 20,
-    paddingVertical: 40,
+    borderRadius: 24,
+    paddingVertical: 44,
     paddingHorizontal: 24,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#334155',
   },
   instruction: {
-    color: '#CBD5E1',
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 12,
+    color: '#94A3B8',
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 14,
     textAlign: 'center',
   },
   playerName: {
-    color: '#F8FAFC',
-    fontSize: 34,
+    color: '#FFFFFF',
+    fontSize: 40,
     fontWeight: '900',
     textAlign: 'center',
+    marginBottom: 24,
+  },
+  divider: {
+    width: 64,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#E63946',
     marginBottom: 20,
   },
   warning: {
-    color: '#94A3B8',
-    fontSize: 14,
+    color: '#CBD5E1',
+    fontSize: 15,
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 22,
   },
 });
