@@ -56,10 +56,22 @@ export default function SetupScreen({ navigation }) {
   };
 
   const handleContinue = () => {
+    const parsed = parseInt(playerInputText, 10);
+    const finalPlayerCount =
+      Number.isNaN(parsed) || parsed < MIN_PLAYERS
+        ? MIN_PLAYERS
+        : Math.min(30, parsed);
+    const finalImpostorCount = Math.min(
+      impostorCount,
+      getMaxImpostors(finalPlayerCount)
+    );
+
+    updatePlayerCount(finalPlayerCount);
+
     navigation.navigate('Names', {
       categoryId: selectedCategory,
-      playerCount,
-      impostorCount: Math.min(impostorCount, getMaxImpostors(playerCount)),
+      playerCount: finalPlayerCount,
+      impostorCount: finalImpostorCount,
     });
   };
 

@@ -1,4 +1,4 @@
-import { CATEGORIES } from '../data/categories';
+import { CATEGORIES } from '../data/categories.js';
 
 export const MIN_PLAYERS = 4;
 
@@ -23,9 +23,9 @@ export function generateRoundData({ categoryId, playerNames, impostorCount }) {
   const secretWord = category.words[randomWordIndex];
 
   const totalPlayers = playerNames.length;
-  const validImpostorCount = Math.min(
-    impostorCount,
-    getMaxImpostors(totalPlayers)
+  const validImpostorCount = Math.max(
+    1,
+    Math.min(impostorCount, getMaxImpostors(totalPlayers))
   );
 
   // Embaralha os índices para sortear os impostores de forma justa (Fisher-Yates parcial)

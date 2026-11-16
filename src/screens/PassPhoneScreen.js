@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PrimaryButton from '../components/PrimaryButton';
 
@@ -7,6 +7,14 @@ export default function PassPhoneScreen({ route, navigation }) {
   const { roundData, currentPlayerIndex } = route.params;
   const currentPlayer = roundData.players[currentPlayerIndex];
   const totalPlayers = roundData.players.length;
+
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true
+    );
+    return () => subscription.remove();
+  }, []);
 
   const handleConfirmIdentity = () => {
     navigation.replace('Reveal', {

@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PrimaryButton from '../components/PrimaryButton';
 
 export default function RevealScreen({ route, navigation }) {
   const { roundData, currentPlayerIndex } = route.params;
   const [isMasking, setIsMasking] = useState(false);
+
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true
+    );
+    return () => subscription.remove();
+  }, []);
 
   const currentPlayer = roundData.players[currentPlayerIndex];
   const totalPlayers = roundData.players.length;
