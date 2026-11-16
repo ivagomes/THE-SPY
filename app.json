@@ -21,6 +21,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "27439dae-d319-44df-8a99-4c6b0789e860"
+      }
+    },
+    "owner": "ivanxgomes"
   }
 }
